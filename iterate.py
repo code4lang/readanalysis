@@ -36,6 +36,6 @@ def search(path):
 def filesearch(path):
     search(path)
     return folder_to_parse
-filesearch(fr"C:\Users\bdefe\Desktop")
+filesearch(fr"path")
 print(folder_to_parse)
 print(nudos_to_parse)

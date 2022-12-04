@@ -1,6 +1,6 @@
 #!/bin/bash
 @echo off
-FOR /f "delims=" %%G IN ('C:\Users\bdefe\Desktop\pdf_to_excelanalysis\data') DO (
+FOR /f "delims=" %%G IN ('path') DO (
    setlocal enabledelayedexpansion  
    pushd "%%~dpG"
    SET fname=%%~nxG

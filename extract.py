@@ -76,4 +76,4 @@ def extract_in_folder(path):
                 file=entry.path
                 print(file)
                 extract(file)
-extract_in_folder(fr"C:\Users\bdefe\Desktop\pdf_to_excelanalysis\data\images")
+extract_in_folder(fr"path")
