@@ -1,0 +1,95 @@
+import pandas as pd
+
+# Cargar el archivo de Excel
+
+'''
+# Analizar el archivo de Excel y buscar información faltante en un texto
+def buscar_informacion_faltante(texto):
+    # Tu lógica para buscar información faltante en el texto
+    # ...
+
+    return informacion_faltante
+
+# Ejemplo de uso
+texto_ejemplo = 'Este es un ejemplo de texto'
+informacion_faltante = buscar_informacion_faltante(texto_ejemplo)
+print(informacion_faltante)
+'''
+
+
+
+
+import pandas as pd
+import numpy as np
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import LabelEncoder
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Dense, Embedding, LSTM
+from tensorflow.keras.preprocessing.text import Tokenizer
+from tensorflow.keras.preprocessing.sequence import pad_sequences
+
+# Load the Excel file
+df = pd.read_excel('/workspaces/readanalysis/0 Modelo Hoja de CALCULO - AE Mutua Terrassa.xlsx', sheet_name=None)
+
+
+# Get the sheet names
+sheet_names = df.keys()
+print(sheet_names)
+# Iterate over each sheet and display the data
+for sheet_name in sheet_names:
+    try:
+        print(type(sheet_name))
+        df = df[sheet_name]
+        print(f"Sheet Name: {sheet_name}")
+        print(df)
+        print("\n")
+    except KeyError:
+        print(f"Sheet '{sheet_name}' does not exist in the Excel file.")
+
+
+# Preprocessing
+df = df.fillna('')  # Replace NaN values with empty strings
+
+# Split the data into training and testing sets
+train_data, test_data = train_test_split(df, test_size=0.2, random_state=42)
+
+
+
+
+# Tokenization and encoding
+tokenizer = Tokenizer()
+tokenizer.fit_on_texts(train_data['Unnamed'])
+vocab_size = len(tokenizer.word_index) + 1
+
+X_train = tokenizer.texts_to_sequences(train_data['text'])
+X_test = tokenizer.texts_to_sequences(test_data['text'])
+
+max_length = 100  # Maximum length of input sequences
+X_train = pad_sequences(X_train, maxlen=max_length, padding='post')
+X_test = pad_sequences(X_test, maxlen=max_length, padding='post')
+
+# Encode the missing information labels
+label_encoder = LabelEncoder()
+train_labels = label_encoder.fit_transform(train_data['missing_info'])
+test_labels = label_encoder.transform(test_data['missing_info'])
+
+# Define the neural network model
+model = Sequential()
+model.add(Embedding(vocab_size, 100, input_length=max_length))
+model.add(LSTM(64))
+model.add(Dense(1, activation='sigmoid'))
+
+model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
+
+# Train the model
+model.fit(X_train, train_labels, validation_data=(X_test, test_labels), epochs=10, batch_size=32)
+
+# Example usage
+example_text = ['This is an example text']
+example_sequence = tokenizer.texts_to_sequences(example_text)
+example_sequence = pad_sequences(example_sequence, maxlen=max_length, padding='post')
+
+prediction = model.predict(example_sequence)
+predicted_label = label_encoder.inverse_transform(np.round(prediction))
+
+print("Predicted missing information:", predicted_label)
