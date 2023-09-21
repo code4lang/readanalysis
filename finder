@@ -29,19 +29,19 @@ from tensorflow.keras.preprocessing.text import Tokenizer
 from tensorflow.keras.preprocessing.sequence import pad_sequences
 
 # Load the Excel file
-df = pd.read_excel('/workspaces/readanalysis/0 Modelo Hoja de CALCULO - AE Mutua Terrassa.xlsx', sheet_name=None)
+df = pd.ExcelFile('/workspaces/readanalysis/0 Modelo Hoja de CALCULO - AE Mutua Terrassa.xlsx')
 
 
 # Get the sheet names
-sheet_names = df.keys()
+sheet_names = df.sheet_names
 print(sheet_names)
 # Iterate over each sheet and display the data
 for sheet_name in sheet_names:
     try:
         print(type(sheet_name))
-        df = df[sheet_name]
+        dt = pd.read_excel(df, sheet_name)
         print(f"Sheet Name: {sheet_name}")
-        print(df)
+        print(dt)
         print("\n")
     except KeyError:
         print(f"Sheet '{sheet_name}' does not exist in the Excel file.")
