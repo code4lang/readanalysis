@@ -46,6 +46,7 @@ for sheet_name in sheet_names:
     except KeyError:
         print(f"Sheet '{sheet_name}' does not exist in the Excel file.")
 
+df=pd.concat([pd.read_excel(df, name) for name in df.sheet_names] , axis=0)
 
 # Preprocessing
 df = df.fillna('')  # Replace NaN values with empty strings
@@ -58,7 +59,8 @@ train_data, test_data = train_test_split(df, test_size=0.2, random_state=42)
 
 # Tokenization and encoding
 tokenizer = Tokenizer()
-tokenizer.fit_on_texts(train_data['Unnamed'])
+print(dir(train_data))
+tokenizer.fit_on_texts([train_data[name] for name in list(train_data.columns)])
 vocab_size = len(tokenizer.word_index) + 1
 
 X_train = tokenizer.texts_to_sequences(train_data['text'])
