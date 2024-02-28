@@ -10,7 +10,7 @@ def convert_toimage(path):
     doc=path[len(path)-position:]
     path_of_the_directory=path[:len(path)-position]
     
-    output=doc.replace("png","tiff")
+    output=doc.replace("jpg","tiff")
     
     cmd = ["magick","-density","500 ",doc,"-alpha", "off", output]
     result=subprocess.Popen(
@@ -21,8 +21,9 @@ def convert_toimage(path):
     
 def extract_totext(path):
     print("extract_totext")
+    print("path=  ",path)
 
-    command="tesseract "+path+".tiff "+path
+    command="tesseract "+path+" "+path
     subprocess.run(command)
 
 
@@ -45,10 +46,11 @@ def extract(path):
     #clean from special cacharacters, avoid injections
     print(path)
     path=fr"{path}"
-    get_text(path)
-    
+    #convert_toimage(path)
+    extract_totext(path)
+    print("path:  ",path)
     minsize=5
-    with open(path+".txt","r", encoding='utf8') as f:
+    '''with open(path+".txt","r", encoding='utf8') as f:
         filesize=len(f.readline())
         if filesize>minsize:
             content= f.read()
@@ -57,11 +59,11 @@ def extract(path):
         convert_toimage(path)
         extract_totext(path)
         with open(path+".txt","r") as f:
-            content= f.read()
+            content= f.read()'''
     #clean(path)
     print("done")
-    print(content)
-    return content
+    #print(content)
+    #return content
 
 
 #extract("03_03955321_correcto")
@@ -76,4 +78,4 @@ def extract_in_folder(path):
                 file=entry.path
                 print(file)
                 extract(file)
-extract_in_folder(fr"path")
+extract_in_folder(fr"\\d.docs.live.net@SSL\DavWWWRoot\A38495B2B6D32E4D\Escritorio\marinaproject\contacts")
