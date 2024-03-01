@@ -65,9 +65,9 @@ import os
 from requests_oauthlib import OAuth2Session
 
 # Replace these values with your own
-client_id = "xxxxxxxxxxxxxxxxxxxxxxxxx"
+client_id = "78eqjz2pzliguk"
 redirect_uri = "http://localhost:8000/callback"
-client_secret = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+client_secret = "pBn6JBZH4zbw5eU0"
 
 # Create OAuth2Session object and initialize authorization
 authorization_url = "https://www.linkedin.com/oauth/v2/authorization"
